@@ -4,6 +4,7 @@ import pandas
 # checks validity of user's number input according to
 # set num_type in main routine. Takes in custom error message
 def num_check(question, error, num_type):
+
     while True:
 
         try:
@@ -87,7 +88,7 @@ def get_expenses(var_fixed):
 
         else:
             quantity = 1
-
+        
         price = num_check("How much for a single item? $", "The price must be a number (more than 0)", float)
 
         # add item, quantity and price to lists
@@ -112,47 +113,19 @@ def get_expenses(var_fixed):
     return [expense_frame, sub_total]
 
 
-def expense_print(heading, frame, subtotal):
-    print()
-    print(f"**** {heading} Costs ****")
-    print(frame)
-    print()
-    print(f"{heading} Costs: ${subtotal:.2f}")
-    return
-
-
 # *** main routine starts here ***
-fixed_frame = ''
 
-# get product name
-product_name = not_blank("Product Name: ", "The product name cannot be blank")
+# Get user data
+# product_name = not_blank("Product name: ", "The product name cannot be blank.")
 
+fixed_expenses = get_expenses("fixed")
+fixed_frame = fixed_expenses[0]
+fixed_sub = fixed_expenses[1]
+
+
+# printing area
 print()
-print("Please enter your variable costs below... ")
-
-# get variable costs
-variable_expenses = get_expenses("variable")
-variable_frame = variable_expenses[0]
-variable_sub = variable_expenses[1]
-
+print(fixed_frame[['Cost']])
 print()
-have_fixed = yes_no("Do you have fixed costs (y / n)? ")
 
-# get fixed costs
-if have_fixed == "yes":
-    fixed_expenses = get_expenses("fixed")
-    fixed_frame = fixed_expenses[0]
-    fixed_sub = fixed_expenses[1]
-
-else:
-    fixed_sub = 0
-
-# *** Printing Area ***
-
-print()
-print(f"**** Fund Raising - {product_name} ****")
-print()
-expense_print("Variable", variable_frame, variable_sub)
-
-if have_fixed == "yes":
-    expense_print("Fixed", fixed_frame[['Cost']], fixed_sub)
+print(f"Fixed Costs: ${fixed_sub:.2f}")
