@@ -1,0 +1,24 @@
+Fund Raising - Kittens (30/05/2024) <change date to /'s>
+
+**** Variable Costs ****
+
+        Quantity  Price     Cost
+Item                            
+kitten       100  $1.00  $100.00
+food         100  $0.50   $50.00
+
+Variable Costs Subtotal: $150.00    <add subtotal>
+
+**** Fixed Costs ****
+
+      Quantity   Price    Cost
+Item                          
+Rent         1  $50.00  $50.00
+
+
+=== Sales Advice ====               <add in heading>
+Profit Target: $500.00       <add $ and 2dp>
+Sales Needed: $700.00
+
+****  Recommended Price: $8.00 *****
+

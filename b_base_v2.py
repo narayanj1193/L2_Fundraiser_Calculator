@@ -1,5 +1,6 @@
 import pandas
 import math
+from datetime import date
 
 
 # asks user if they have used the quiz before, if not displays instructions
@@ -71,41 +72,54 @@ def currency(x):
 # the data frame and subtotal
 def get_expenses(var_fixed):
     # setup dictionaries and lists
+
     item_list = []
     quantity_list = []
     price_list = []
+
     variable_dict = {
         "Item": item_list,
         "Quantity": quantity_list,
         "Price": price_list
     }
+
     # loop to get component, quantity and price
     item_name = ""
     while item_name.lower() != "xxx":
+
         print()
         # get name , quantity and item
         item_name = not_blank("Item name: ", "The item name cannot be blank.")
         if item_name.lower() == "xxx":
             break
+
         if var_fixed == "variable":
             quantity = num_check("Quantity: ", "The amount must be a whole number more than zero.", int)
+
         else:
             quantity = 1
+
         price = num_check("How much for a single item? $", "The price must be a number (more than 0)", float)
+
         # add item, quantity and price to lists
         item_list.append(item_name)
         quantity_list.append(quantity)
         price_list.append(price)
+
     expense_frame = pandas.DataFrame(variable_dict)
     expense_frame = expense_frame.set_index('Item')
+
     # calculate Cost of each component
     expense_frame['Cost'] = expense_frame['Quantity'] * expense_frame['Price']
+
     # find subtotal
     sub_total = expense_frame['Cost'].sum()
+
     # currency formatting (uses currency function)
     add_dollars = ['Price', 'Cost']
     for item in add_dollars:
         expense_frame[item] = expense_frame[item].apply(currency)
+
     return [expense_frame, sub_total]
 
 
@@ -188,6 +202,7 @@ def round_up(amount, round_to):
 
 
 # *** main routine starts here ***
+
 print("*** Fundraising Calculator ***")
 
 instructions()
@@ -234,15 +249,43 @@ round_to = num_check("Round to nearest...? $", "Can't be 0", int)
 selling_price = sales_needed / how_many
 
 recommended_price = round_up(selling_price, round_to)
+
 # *** Printing Area ***
 
-print()
-print(f"**** Fund Raising - {product_name} ****")
+# *** Get current date for heading and filename ***
+# Get today's date
+today = date.today()
+
+# Get day, month and year as individual strings
+day = today.strftime("%d")
+month = today.strftime("%m")
+year = today.strftime("%Y")
+
+product_name = f"Fund Raising - {product_name} ({day}_{month}_{year})"
+variable_heading = "**** Variable Costs ****"
+fixed_cost_heading = "**** Fixed Costs ****"
+
+# change frames to strings
+variable_txt = pandas.DataFrame.to_string(variable_frame)
+fixed_txt = pandas.DataFrame.to_string(fixed_frame)
+
+to_write = [product_name, variable_heading, variable_txt, fixed_cost_heading, fixed_txt,
+            f"*** Profit Target: {profit_target} ***",
+            f"Sales Needed: ${sales_needed:.2f}", f"Recommended Price: ${recommended_price:.2f}"]
+
+# create file to hold data (add .txt extension)
+file_name = f"{product_name}.txt"
+text_file = open(file_name, "w+")
+
+# heading
+for item in to_write:
+    item = f"{item}"
+    text_file.write(item)
+    text_file.write("\n\n")
+
+text_file.close()
 
 print()
-print(f"Total Costs: ${all_costs:.2f}")
-print(f"Profit Target: ${profit_target:.2f}")
-print(f"Total Sales Needed: ${sales_needed:.2f}")
-print(f"Recommended Price: ${recommended_price:.2f}")
-
-
+for item in to_write:
+    print(item)
+    print()
